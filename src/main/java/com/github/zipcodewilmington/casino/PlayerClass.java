@@ -68,6 +68,4 @@ public abstract class PlayerClass implements PlayerInterface {
         return playerWantToSpend;
     }
 
-
-
 }
