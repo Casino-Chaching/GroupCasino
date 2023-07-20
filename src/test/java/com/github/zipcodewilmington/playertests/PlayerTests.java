@@ -14,7 +14,7 @@ public class PlayerTests {
         PlayerClass brent  = new PlayerClass(wallet,null,null,null);
         CasinoAccount expected = wallet;
         //When
-        CasinoAccount actual = brent.getWallet();
+        Integer actual = brent.getWallet();
         //Then
         Assert.assertEquals(expected,actual);
     }
