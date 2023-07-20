@@ -1,2 +1,4 @@
-package com.github.zipcodewilmington.casino.slotsgamestests;public class TestSlotsGame {
+package com.github.zipcodewilmington.casino.slotsgamestests;
+
+public class TestSlotsGame {
 }
