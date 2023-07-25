@@ -1,5 +1,6 @@
 package com.github.zipcodewilmington.casino;
 
+import com.github.zipcodewilmington.Casino;
 import com.github.zipcodewilmington.casino.cardutils.*;
 import com.github.zipcodewilmington.utils.AnsiColor;
 import com.github.zipcodewilmington.utils.IOConsole;
@@ -74,7 +75,8 @@ public abstract class CardPlayer extends PlayerClass{
 
         if(pcv == null || pcs == null){
             // or some exception??? dunno yet
-            return null;
+            Casino.errorMessage.println("INVALID CARD INPUT! Try again.");
+            return promptForCard(prompt);
         }
         return new PlayingCard(pcs, pcv);
     }

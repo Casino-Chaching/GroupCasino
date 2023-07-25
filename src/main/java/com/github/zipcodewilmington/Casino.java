@@ -36,26 +36,12 @@ public class Casino implements Runnable {
                 CasinoAccount casinoAccount = casinoAccountManager.getAccount(accountName, accountPassword);
                 boolean isValidLogin = casinoAccount != null;
                 if (isValidLogin) {
-                    String gameSelectionInput = getGameSelectionInput().toUpperCase();
-                    if (gameSelectionInput.equals("SLOTS")) {
-                        play(new SlotsGame(), new SlotsPlayer(casinoAccount,console));
-                    } else if (gameSelectionInput.equals("NUMBERGUESS")) {
-                        play(new NumberGuessGame(), new NumberGuessPlayer(casinoAccount, console));
-                    } else if (gameSelectionInput.equals("BLACKJACK")) {
-                        play(new BlackJackGame(), new BlackJackPlayer(casinoAccount, console));
-                    }else if (gameSelectionInput.equals("SPADES")) {
-                        play(new SpadesGame(), new SpadesPlayer(casinoAccount, console));
-                    } else if (gameSelectionInput.equals("ROULETTE")) {
-                        play(new RouletteGame(), new RoulettePlayer(casinoAccount, console));
-                    }else {
-                        // TODO - implement better exception handling
-                        String errorMessage = "[ %s ] is an invalid game selection";
-                        throw new RuntimeException(String.format(errorMessage, gameSelectionInput));
-                    }
+                    playSomeGames(casinoAccount);
                 } else {
                     // TODO - implement better exception handling
                     String errorMessage = "No account found with name of [ %s ] and password of [ %s ]";
-                    throw new RuntimeException(String.format(errorMessage, accountPassword, accountName));
+                    Casino.errorMessage.println(String.format(errorMessage, accountName, accountPassword));
+//                    throw new RuntimeException(String.format(errorMessage, accountPassword, accountName));
                 }
             } else if ("create-account".equals(arcadeDashBoardInput)) {
                 console.println("Welcome to the account-creation screen.");
@@ -63,12 +49,37 @@ public class Casino implements Runnable {
                 String accountPassword = console.getStringInput("Enter your account password:");
                 if(casinoAccountManager.getAccount(accountName, accountPassword) != null){
                     errorMessage.println("This account already exists!");
+                    continue;
                 }
                 CasinoAccount newAccount = casinoAccountManager.createAccount(accountName, accountPassword);
                 casinoAccountManager.registerAccount(newAccount);
             }
+            else if(!"logout".equals(arcadeDashBoardInput)){
+                String errorMessage = "INVALID INPUT! Try again!";
+                Casino.errorMessage.println(String.format(errorMessage));
+            }
 //            clearScreen();
         } while (!"logout".equals(arcadeDashBoardInput));
+    }
+
+    private void playSomeGames(CasinoAccount casinoAccount) {
+        String gameSelectionInput = getGameSelectionInput().toUpperCase();
+        if (gameSelectionInput.equals("SLOTS")) {
+            play(new SlotsGame(), new SlotsPlayer(casinoAccount,console));
+        } else if (gameSelectionInput.equals("NUMBERGUESS")) {
+            play(new NumberGuessGame(), new NumberGuessPlayer(casinoAccount, console));
+        } else if (gameSelectionInput.equals("BLACKJACK")) {
+            play(new BlackJackGame(), new BlackJackPlayer(casinoAccount, console));
+        }else if (gameSelectionInput.equals("SPADES")) {
+            play(new SpadesGame(), new SpadesPlayer(casinoAccount, console));
+        } else if (gameSelectionInput.equals("ROULETTE")) {
+            play(new RouletteGame(), new RoulettePlayer(casinoAccount, console));
+        }else {
+            // TODO - implement better exception handling
+            String errorMessage = "[ %s ] is an invalid game selection";
+//            throw new RuntimeException(String.format(errorMessage, gameSelectionInput));
+            Casino.errorMessage.println(String.format(errorMessage, gameSelectionInput));
+        }
     }
 
     private String getArcadeDashboardInput() {

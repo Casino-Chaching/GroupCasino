@@ -112,16 +112,22 @@ public class BlackJackGame extends CardGame implements GambleGameInterface {
     void logPlayerBets() {
         for(CardPlayer cp : super.getPlayers()) {
             if(!(cp instanceof DealerPlayer)) {
-                BlackJackPlayer temp = (BlackJackPlayer) cp;
+                // have the ability to check your balance first
+                boolean checkBalance = cp.promptPlayerForYesOrNo("Would you like to check your balance first? (Yes/No)");
+                if(checkBalance){
+                    cp.printToConsole(String.format("Your balance is: %d", cp.getWallet()));
+                }
                 // check to see if they wanna try and play this game with no money bc WTF
-                if (temp.getWallet() == 0){
+                if (cp.getWallet() == 0){
                     Casino.invalidGambler();
                 }
+                // NOW DO BLACKJACK STUFF
+                BlackJackPlayer temp = (BlackJackPlayer) cp;
                 int betValue;
                 do {
                     betValue = temp.promptPlayerFoMoney("How much do you wanna bet?");
                     if(!temp.validBet(betValue)){
-                        blackjackMenu.println(String.format("STOP IT! You're poor! You only have %d in your account!\n\n", temp.getWallet()));
+                        Casino.errorMessage.println(String.format("STOP IT! You're poor! You only have %d in your account!\n", temp.getWallet()));
                     }
                 } while (!temp.validBet(betValue));
 
